@@ -7,9 +7,10 @@
 // ----------------------------------------------------------------
 
 #include "Texture.h"
-#include <SOIL/SOIL.h>
 #include <GL/glew.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 
 Texture::Texture()
 :mTextureID(0)
@@ -28,12 +29,12 @@ bool Texture::Load(const std::string& fileName)
 {
 	int channels = 0;
 	
-	unsigned char* image = SOIL_load_image(fileName.c_str(),
-										   &mWidth, &mHeight, &channels, SOIL_LOAD_AUTO);
+	unsigned char* image = stbi_load(fileName.c_str(),
+										   &mWidth, &mHeight, &channels, 0);
 	
 	if (image == nullptr)
 	{
-		SDL_Log("SOIL failed to load image %s: %s", fileName.c_str(), SOIL_last_result());
+		SDL_Log("SOIL failed to load image %s", fileName.c_str());
 		return false;
 	}
 	
@@ -49,7 +50,7 @@ bool Texture::Load(const std::string& fileName)
 	glTexImage2D(GL_TEXTURE_2D, 0, format, mWidth, mHeight, 0, format,
 				 GL_UNSIGNED_BYTE, image);
 	
-	SOIL_free_image_data(image);
+	stbi_image_free(image);
 	
 	// Enable linear filtering
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

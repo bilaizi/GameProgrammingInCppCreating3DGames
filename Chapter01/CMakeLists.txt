@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.22)
+project(Chapter01)
+set(CMAKE_CXX_STANDARD 17)
+include_directories(../External/SDL2-devel-2.28.2-mingw/x86_64-w64-mingw32/include)
+link_directories(../External/SDL2-devel-2.28.2-mingw//x86_64-w64-mingw32/bin)
+file(GLOB SOURCES *.cpp)
+add_executable(Chapter1 ${SOURCES})
+target_link_libraries(Chapter01 SDL2)
